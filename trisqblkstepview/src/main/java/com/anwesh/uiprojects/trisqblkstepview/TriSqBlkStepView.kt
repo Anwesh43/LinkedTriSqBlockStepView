@@ -209,7 +209,7 @@ class TriSqBlkStepView(ctx : Context) : View(ctx) {
         fun create(activity : Activity) : TriSqBlkStepView {
             val view : TriSqBlkStepView = TriSqBlkStepView(activity)
             activity.setContentView(view)
-            return view 
+            return view
         }
     }
 }
