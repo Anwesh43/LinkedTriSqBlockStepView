@@ -23,7 +23,7 @@ val foreColor : Int = Color.parseColor("#673AB7")
 val backColor : Int = Color.parseColor("#BDBDBD")
 
 fun Int.inverse() : Float = 1f / this
-fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, i * n.inverse())
+fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.scaleFactor() : Float = Math.floor(this / scDiv).toFloat()
 fun Float.mirrorValue(a : Int, b : Int) : Float = (1 - scaleFactor()) * a.inverse() + (scaleFactor()) * b.inverse()
@@ -34,16 +34,21 @@ fun Canvas.drawTSBNode(i : Int, scale : Float, paint : Paint) {
     val h : Float = height.toFloat()
     val gap : Float = w / (nodes + 1)
     val size : Float = gap / sizeFactor
-    val blkSize : Float = size / 4
+    val blkSize : Float = size / 2
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
     paint.color = foreColor
     save()
-    translate(gap * (i + 1), h/2 * (1 - sc2))
-    for (j in 0..(blocks - 1)) {
-        val sc : Float = sc1.divideScale(j, blocks)
+    translate(gap * (i + 1), h/2 * ( 1 - sc2))
+    var deg : Float = 0f
+    for (j in 0..(blocks)) {
+        var sc : Float = 0f
+        if (j > 0) {
+             sc = sc1.divideScale(j - 1, blocks)
+        }
+        deg += 90f * sc
         save()
-        rotate(90f * j * sc)
+        rotate(deg)
         translate(-(size - blkSize/2), 0f)
         drawRect(RectF(-blkSize/2, -blkSize/2, blkSize/2, blkSize/2), paint)
         restore()
