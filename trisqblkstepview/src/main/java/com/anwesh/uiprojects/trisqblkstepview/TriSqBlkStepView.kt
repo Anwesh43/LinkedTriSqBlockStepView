@@ -182,4 +182,25 @@ class TriSqBlkStepView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : TriSqBlkStepView) {
+        private val animator : Animator = Animator(view)
+        private val tbs : TriSqBlkStep = TriSqBlkStep(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            tbs.draw(canvas, paint)
+            animator.animate {
+                tbs.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            tbs.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
