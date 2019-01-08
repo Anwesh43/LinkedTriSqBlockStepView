@@ -204,4 +204,12 @@ class TriSqBlkStepView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+        fun create(activity : Activity) : TriSqBlkStepView {
+            val view : TriSqBlkStepView = TriSqBlkStepView(activity)
+            activity.setContentView(view)
+            return view 
+        }
+    }
 }
