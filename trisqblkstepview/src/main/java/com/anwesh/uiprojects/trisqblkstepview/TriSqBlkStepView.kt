@@ -9,6 +9,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Color
+import android.graphics.RectF
 import android.view.View
 import android.view.MotionEvent
 
@@ -28,3 +29,24 @@ fun Float.scaleFactor() : Float = Math.floor(this / scDiv).toFloat()
 fun Float.mirrorValue(a : Int, b : Int) : Float = (1 - scaleFactor()) * a.inverse() + (scaleFactor()) * b.inverse()
 fun Float.updateScale(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap
 
+fun Canvas.drawTSBNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = w / (nodes + 1)
+    val size : Float = gap / sizeFactor
+    val blkSize : Float = size / 4
+    val sc1 : Float = scale.divideScale(0, 2)
+    val sc2 : Float = scale.divideScale(1, 2)
+    paint.color = foreColor
+    save()
+    translate(gap * (i + 1), h/2 * (1 - sc2))
+    for (j in 0..(blocks - 1)) {
+        val sc : Float = sc1.divideScale(j, blocks)
+        save()
+        rotate(90f * j * sc)
+        translate(-(size - blkSize/2), 0f)
+        drawRect(RectF(-blkSize/2, -blkSize/2, blkSize/2, blkSize/2), paint)
+        restore()
+    }
+    restore()
+}
